@@ -18,13 +18,13 @@ const IndexRoutes = () => {
     return (
         <Switch>
             <Route exact path="/quiz/create">
-                <CreateQuiz />
+                <CreateQuiz initialState={initialState} setInitialState={setInitialState} />
             </Route>
             <Route exact path="/quiz/edit/:id">
-                <EditQuiz />
+                <EditQuiz initialState={initialState} setInitialState={setInitialState} />
             </Route>
             <Route exact path="/quiz/:id">
-                <QuestionQuiz />
+                <QuestionQuiz initialState={initialState} setInitialState={setInitialState} />
             </Route>
             <Route path="/">
                 <App initialState={initialState} setInitialState={setInitialState} />
