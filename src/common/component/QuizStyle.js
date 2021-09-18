@@ -2,6 +2,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { red } from '@material-ui/core/colors';
 
 export const useStyles = makeStyles((theme) => ({
+    // Quiz Styles
     root: {
         maxWidth: 345,
     },
@@ -10,16 +11,6 @@ export const useStyles = makeStyles((theme) => ({
         display: "flex",
         alignItems: "center",
         justifyContent: "center"
-    },
-    expand: {
-        transform: 'rotate(0deg)',
-        marginLeft: 'auto',
-        transition: theme.transitions.create('transform', {
-        duration: theme.transitions.duration.shortest,
-        }),
-    },
-    expandOpen: {
-        transform: 'rotate(180deg)',
     },
     avatar: {
         backgroundColor: red[400],
@@ -40,6 +31,31 @@ export const useStyles = makeStyles((theme) => ({
         marginLeft: 'auto',
         "&:hover":{
             color: "green"
+        }
+    },
+    // QuestionQuiz styles
+    loading: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: "100vh"
+    },
+    paper: {
+        padding: theme.spacing(2),
+        margin: theme.spacing(3),
+        textAlign: "center",
+        color: theme.palette.text.secondary,
+        "& > * + *": {
+            marginTop: theme.spacing(1),
+        },
+    },
+    BackIcon: {
+        position: "absolute",
+        top: -20,
+        left: 20,
+        color: "red",
+        "& svg": {
+            fontSize: "30px"
         }
     }
 }));

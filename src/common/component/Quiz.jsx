@@ -12,24 +12,17 @@ import YouTubeIcon from '@material-ui/icons/YouTube';
 import { useStyles } from "./QuizStyle";
 import EditIcon from '@material-ui/icons/Edit';
 import TouchAppIcon from '@material-ui/icons/TouchApp';
+import { scoreColor } from "./../helper/functions";
 
 const Quiz = ({ data, num, initialState, setInitialState, history }) => {
     const classes = useStyles();
-    
-    const scoreColor = () => {
-        const percent = (+data.score / +data.questions_answers.length) * 100;
-        if (data.score) {
-            if (percent < 50) return "#ff0000e3";
-            else return "#16b315e3";
-        }
-        else return "";
-    }
 
     const deleteQuiz = (id) => {
         initialState.listQuizData.splice(initialState.listQuizData.findIndex(function(i){
             return i.id === id;
         }), 1);
         setInitialState({...initialState, listQuizData: initialState  })
+        // setInitialState({...initialState, listQuizData: initialState.listQuizData.filter(da => +da.id === id)})
     }
     
     return (
@@ -48,7 +41,7 @@ const Quiz = ({ data, num, initialState, setInitialState, history }) => {
                 title={data.title}
                 subheader={data.created}
             />
-            <CardContent className={classes.media} style={{ backgroundColor: `${scoreColor()}` }}>
+            <CardContent className={classes.media} style={{ backgroundColor: `${scoreColor(data)}` }}>
                 <Typography variant="h2" color="textSecondary">
                     {data.score ? data.score : "-"} / {data.questions_answers.length}
                 </Typography>
