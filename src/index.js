@@ -1,13 +1,26 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { Provider } from "react-redux";
+import { store } from "./config/state/store";
 import reportWebVitals from './reportWebVitals';
+import CreateQuiz from "./common/component/CreateQuiz";
+import EditQuiz from "./common/component/EditQuiz";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <BrowserRouter>
+    <Provider store={store}>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Switch>
+          <Route exact path="/quiz/create" component={CreateQuiz} />
+          <Route exact path="/quiz/edit/:id" component={EditQuiz} />
+          <Route path="/" component={App} />
+        </Switch>
+      </Suspense>
+    </Provider>
+  </BrowserRouter>,
   document.getElementById('root')
 );
 
