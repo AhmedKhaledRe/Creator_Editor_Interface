@@ -1,23 +1,17 @@
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./config/state/store";
 import reportWebVitals from './reportWebVitals';
-import CreateQuiz from "./common/component/CreateQuiz";
-import EditQuiz from "./common/component/EditQuiz";
+import IndexRoutes from './IndexRoutes';
 
 ReactDOM.render(
   <BrowserRouter>
     <Provider store={store}>
       <Suspense fallback={<div>Loading...</div>}>
-        <Switch>
-          <Route exact path="/quiz/create" component={CreateQuiz} />
-          <Route exact path="/quiz/edit/:id" component={EditQuiz} />
-          <Route path="/" component={App} />
-        </Switch>
+        <IndexRoutes />
       </Suspense>
     </Provider>
   </BrowserRouter>,
