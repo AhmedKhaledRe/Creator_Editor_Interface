@@ -14,7 +14,9 @@ const IndexRoutes = () => {
         setInitialState({ ...initialState , listQuizData: JSON.parse(localStorage.getItem("QuizList")) || [...initialState.listQuizData, ...initialData], loaded: true });
         return () => {}
         // eslint-disable-next-line
-    }, [])
+    }, []);
+
+    console.log(initialState.listQuizData)
     
     return (
         <Switch>

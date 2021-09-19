@@ -63,7 +63,7 @@ const CreateEditForm = ({ initialState, setInitialState, history, form, initialV
             {
                 "created": moment().format("YYYY-MM-DD hh:mm:ss"),
                 "description": form.quizForm.values.description,
-                "id": +Math.random().toString(30).slice(3),
+                "id": Math.floor(Math.random() * 100),
                 "modified": moment().format("YYYY-MM-DD hh:mm:ss"),
                 "questions_answers": [...questions],
                 "score": null,

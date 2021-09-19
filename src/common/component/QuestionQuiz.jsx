@@ -68,17 +68,21 @@ const QuestionQuiz = ({ match, history, initialState, setInitialState, initState
                                 value={questionElement.answer_id ? +questionElement.answer_id : null}
                                 onChange={handleRadioChange}
                             >
-                                {questionElement.answers.map((ans, answerIndex) =>
-                                    <FormControlLabel 
-                                        key={answerIndex}
-                                        disabled={Boolean(questionElement?.answer_id)} 
-                                        value={+ans?.id}
-                                        name={""+questionElementIndex}
-                                        control={<Radio />} 
-                                        label={ans.text} />
-                                )}
+                                {questionElement.answers.map((ans, answerIndex) => {
+                                    console.log({ans})
+                                    return(
+                                        <FormControlLabel 
+                                            key={answerIndex}
+                                            disabled={questionElement?.answer_id !== null} 
+                                            value={ans?.id}
+                                            checked={Boolean(ans?.id === +questionElement?.answer_id)}
+                                            name={""+questionElementIndex}
+                                            control={<Radio />} 
+                                            label={ans.text} />
+                                    )})
+                                }
                             </RadioGroup>
-                            {questionElement.answer_id 
+                            {questionElement.answer_id !== null
                                 ? (questionElement.answers.filter(q => +q.id === +questionElement.answer_id)[0]?.is_true 
                                         ?   <Typography style={{ color: "Green" }} variant="h5">{questionElement.feedback_true}</Typography> 
                                         :   <Typography style={{ color: "Red" }} variant="h5">{questionElement.feedback_false}</Typography>)
@@ -86,11 +90,6 @@ const QuestionQuiz = ({ match, history, initialState, setInitialState, initState
                             }
                         </Paper>
                     )})}
-                    {initStateQuestion?.selectedQuiz.questions_answers.length === +initStateQuestion?.selectedQuiz.score &&
-                        <div style={{margin: "20px auto", textAlign: "center"}}>
-                            <Button variant="outlined" color="primary" onClick={() => history.push("/")}> Go Back </Button>
-                        </div>
-                    }
                 </div>
             :
                 <Typography color="red" variant="h4">
