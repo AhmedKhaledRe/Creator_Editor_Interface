@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Typography, Paper, RadioGroup, FormControlLabel, Radio, Button } from '@material-ui/core';
 import { withRouter } from "react-router-dom";
 import { useStyles } from "./QuizStyle";
@@ -69,7 +69,6 @@ const QuestionQuiz = ({ match, history, initialState, setInitialState, initState
                                 onChange={handleRadioChange}
                             >
                                 {questionElement.answers.map((ans, answerIndex) => {
-                                    console.log({ans})
                                     return(
                                         <FormControlLabel 
                                             key={answerIndex}

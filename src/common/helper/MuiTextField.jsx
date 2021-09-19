@@ -38,6 +38,7 @@ const MuiTextField = ({
   required,
   placeholder,
   rows = 1,
+  value,
   meta: { touched, invalid, error },
 }) => {
   const classes = useStyles();
@@ -48,16 +49,8 @@ const MuiTextField = ({
       placeholder={placeholder}
       className={classes.root}
       multiline={multiline}
-      inputProps={
-        type === "number" 
-          ? {  
-              inputMode: 'decimal',
-              pattern: "[+]?([0-9]*[.])?[0-9]+",
-              step: "0.01",
-              min: "0"
-            } 
-          : {}}
       rows={rows}
+      value={value}
       label={label}
       disabled={disabled}
       type={type}
