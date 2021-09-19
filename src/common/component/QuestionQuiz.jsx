@@ -1,45 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Grid, Paper, RadioGroup, FormControlLabel, Radio, Button } from '@material-ui/core';
+import { Typography, Paper, RadioGroup, FormControlLabel, Radio, Button } from '@material-ui/core';
 import { withRouter } from "react-router-dom";
 import { useStyles } from "./QuizStyle";
 import { scoreColor } from "../helper/functions";
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
-const QuestionQuiz = ({ match, history, initialState, setInitialState }) => {
+const QuestionQuiz = ({ match, history, initialState, setInitialState, initStateQuestion, setInitStateQuestion }) => {
     const classes = useStyles();
     const quizId = match.params.id;
-    const [initStateQuestion, setInitStateQuestion] = useState({ loaded: false, selectedQuiz: null })
+    const moment = require('moment');
+
     const handleRadioChange = (e) => {
         const {name, value} = e.target;
-        console.log({name});
-        console.log({value})
+        let modifiedAnswers = initStateQuestion.selectedQuiz.questions_answers;
+        modifiedAnswers[name].answer_id = +value;
+        let finalQuiz = {...initStateQuestion.selectedQuiz, 
+            score: modifiedAnswers[name].answers.filter(q => +q.id === +value)[0]?.is_true ? +initStateQuestion.selectedQuiz.score + 1 : initStateQuestion.selectedQuiz.score , 
+            questions_answers: modifiedAnswers};
+        setInitStateQuestion({
+            ...initStateQuestion, 
+            selectedQuiz: finalQuiz
+        })
+        if ( initStateQuestion.selectedQuiz.questions_answers.length ===  (+name + 1) ) {
+            initialState.listQuizData = initialState.listQuizData.map(u => u.id !== finalQuiz.id ? u : finalQuiz);
+            initialState.listQuizData[0].modified = moment().format("YYYY-MM-DD hh:mm:ss");
+            setInitialState({...initialState, listQuizData: initialState.listQuizData})
+            localStorage.setItem("QuizList", JSON.stringify(initialState.listQuizData));
+        }
     };
 
-    // const handleAnswer = (e) => {
-    //     const newItems = [...questions];
-    //     newItems[e.target.name].answer_id = e.target.value
-    //     setQuestions(newItems);
-
-    //     if (newItems[e.target.name].answers[e.target.value].is_true) {
-    //         const NumRight = numRight
-    //         setNumRight(NumRight + 1)
-    //     }
-
-    // };
-
-    console.log(initStateQuestion.selectedQuiz)
-
     useEffect(() => {
-            const selected = initialState.listQuizData.filter(da => +da.id === +quizId)
-            if (selected.length > 0) {
-                console.log({selected})
-                setInitStateQuestion({
-                    ...initStateQuestion, 
-                    selectedQuiz: selected[0], 
-                    loaded: true
-                });
-            }
+        const selected = initialState.listQuizData.filter(da => +da.id === +quizId);
+        if (selected.length > 0) {
+            setInitStateQuestion({
+                ...initStateQuestion, 
+                selectedQuiz: selected[0], 
+                loaded: true
+            });
+        }
         else history.push("/")
         return () => {}
         // eslint-disable-next-line
@@ -63,7 +62,7 @@ const QuestionQuiz = ({ match, history, initialState, setInitialState }) => {
                 </div>
                 {initStateQuestion?.selectedQuiz?.questions_answers?.map((questionElement, questionElementIndex) => {
                     return (
-                        <Paper variant="outlined" className={classes.paper}  >
+                        <Paper key={questionElementIndex} variant="outlined" className={classes.paper}  >
                             <Typography style={{margin: "20px auto"}} variant="h5">{`(${questionElementIndex + 1})`} {questionElement.text}</Typography>
                             <RadioGroup
                                 value={questionElement.answer_id ? +questionElement.answer_id : null}
@@ -72,24 +71,25 @@ const QuestionQuiz = ({ match, history, initialState, setInitialState }) => {
                                 {questionElement.answers.map((ans, answerIndex) =>
                                     <FormControlLabel 
                                         key={answerIndex}
-                                        disabled={questionElement?.answer_id} 
+                                        disabled={Boolean(questionElement?.answer_id)} 
                                         value={+ans?.id}
-                                        name={questionElementIndex}
+                                        name={""+questionElementIndex}
                                         control={<Radio />} 
                                         label={ans.text} />
                                 )}
                             </RadioGroup>
-                            {questionElement.answer_id && (
-                                questionElement.answers[questionElement.answer_id]?.is_true 
-                                    ?   <Typography style={{ color: "Green" }} variant="h5">{questionElement.feedback_true}</Typography> 
-                                    :   <Typography style={{ color: "Red" }} variant="h5">{questionElement.feedback_false}</Typography>)
+                            {questionElement.answer_id 
+                                ? (questionElement.answers.filter(q => +q.id === +questionElement.answer_id)[0]?.is_true 
+                                        ?   <Typography style={{ color: "Green" }} variant="h5">{questionElement.feedback_true}</Typography> 
+                                        :   <Typography style={{ color: "Red" }} variant="h5">{questionElement.feedback_false}</Typography>)
+                                : null
                             }
                         </Paper>
                     )})}
                     {initStateQuestion?.selectedQuiz.questions_answers.length === +initStateQuestion?.selectedQuiz.score &&
-                        <diV style={{margin: "20px auto", textAlign: "center"}}>
-                            <Button variant="outlined" color="primary" > Go Back </Button>
-                        </diV>
+                        <div style={{margin: "20px auto", textAlign: "center"}}>
+                            <Button variant="outlined" color="primary" onClick={() => history.push("/")}> Go Back </Button>
+                        </div>
                     }
                 </div>
             :

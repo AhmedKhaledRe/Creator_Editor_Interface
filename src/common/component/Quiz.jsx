@@ -22,7 +22,7 @@ const Quiz = ({ data, num, initialState, setInitialState, history }) => {
             return i.id === id;
         }), 1);
         setInitialState({...initialState, listQuizData: initialState  })
-        // setInitialState({...initialState, listQuizData: initialState.listQuizData.filter(da => +da.id === id)})
+        localStorage.setItem("QuizList", JSON.stringify(initialState.listQuizData));
     }
     
     return (
@@ -30,7 +30,7 @@ const Quiz = ({ data, num, initialState, setInitialState, history }) => {
             <CardHeader
                 avatar={
                     <Avatar className={classes.avatar}>
-                        {num}
+                        {+num + 1}
                     </Avatar>
                 }
                 action={

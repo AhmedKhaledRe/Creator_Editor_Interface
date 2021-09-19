@@ -5,7 +5,8 @@
 }
 
 .app_main_div {
-  padding: 20px
+  padding: 20px;
+  position: relative !important;
 }
 
 .AddIcon {
@@ -16,5 +17,5 @@
 }
 
 .quiz_main_div {
-  margin-top: 50px
+  margin-top: 80px
 }

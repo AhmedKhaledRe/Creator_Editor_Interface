@@ -8,9 +8,10 @@ import initialData from "./common/helper/initialData";
 
 const IndexRoutes = () => {
     const [initialState, setInitialState] = useState({ loaded: false, listQuizData: [] })
+    const [initStateQuestion, setInitStateQuestion] = useState({ loaded: false, selectedQuiz: null })
 
     useEffect(() => {
-        setInitialState({ ...initialState , listQuizData: [...initialState.listQuizData, ...initialData], loaded: true });
+        setInitialState({ ...initialState , listQuizData: JSON.parse(localStorage.getItem("QuizList")) || [...initialState.listQuizData, ...initialData], loaded: true });
         return () => {}
         // eslint-disable-next-line
     }, [])
@@ -24,7 +25,7 @@ const IndexRoutes = () => {
                 <EditQuiz initialState={initialState} setInitialState={setInitialState} />
             </Route>
             <Route exact path="/quiz/:id">
-                <QuestionQuiz initialState={initialState} setInitialState={setInitialState} />
+                <QuestionQuiz initialState={initialState} setInitialState={setInitialState} initStateQuestion={initStateQuestion} setInitStateQuestion={setInitStateQuestion} />
             </Route>
             <Route path="/">
                 <App initialState={initialState} setInitialState={setInitialState} />
