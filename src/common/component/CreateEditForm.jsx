@@ -59,7 +59,8 @@ const CreateEditForm = ({ initialState, setInitialState, history, formData, init
 
     const handleEnterText = (e, questionNewIndex) => {
         const {name, value} = e.target;
-        questions[questionNewIndex][name.split("_")[0]] = value;
+        if (name.includes("feedback")) questions[questionNewIndex][name.split("*")[0]] = value;
+        else questions[questionNewIndex][name.split("_")[0]] = value;
         setQuestions([...questions]);
     }
 
@@ -113,13 +114,13 @@ const CreateEditForm = ({ initialState, setInitialState, history, formData, init
                                             <Grid item xs={12}>
                                                 <Grid container justifyContent="center" spacing={2}>
                                                     <Grid item xs={10}>
-                                                        <Field name={`text_${questionNew.id}`} value={questionNew.text} type="text" label={`Question ${questionNew.id}`} onChange={(e) => handleEnterText(e, questionNewIndex)} required component={MuiTextField}/>
+                                                        <Field name={`text_${questionNew.id}`} type="text" label={`Question ${questionNew.id}`} onChange={(e) => handleEnterText(e, questionNewIndex)} required component={MuiTextField}/>
                                                     </Grid>
                                                     <Grid item xs={10}>
-                                                        <Field name={`feedback_true_${questionNew.id}`} value={questionNew.feedback_true} type="text" label={`Question Positive Feedback ${questionNew.id}`} onChange={(e) => handleEnterText(e, questionNewIndex)} required component={MuiTextField}/>
+                                                        <Field name={`feedback_true*${questionNew.id}`} type="text" label={`Question Positive Feedback ${questionNew.id}`} onChange={(e) => handleEnterText(e, questionNewIndex)} required component={MuiTextField}/>
                                                     </Grid>
                                                     <Grid item xs={10}>
-                                                        <Field name={`feedback_false_${questionNew.id}`}  value={questionNew.feedback_false} type="text" label={`Question Negative Feedback ${questionNew.id}`} onChange={(e) => handleEnterText(e, questionNewIndex)} required component={MuiTextField}/>
+                                                        <Field name={`feedback_false*${questionNew.id}`}  type="text" label={`Question Negative Feedback ${questionNew.id}`} onChange={(e) => handleEnterText(e, questionNewIndex)} required component={MuiTextField}/>
                                                     </Grid>
                                                 </Grid >
                                             </Grid >

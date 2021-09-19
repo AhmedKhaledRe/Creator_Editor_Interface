@@ -61,6 +61,7 @@ const QuestionQuiz = ({ match, history, initialState, setInitialState, initState
                     </Typography>
                 </div>
                 {initStateQuestion?.selectedQuiz?.questions_answers?.map((questionElement, questionElementIndex) => {
+                    console.log(questionElement)
                     return (
                         <Paper key={questionElementIndex} variant="outlined" className={classes.paper}  >
                             <Typography style={{margin: "20px auto"}} variant="h5">{`(${questionElementIndex + 1})`} {questionElement.text}</Typography>
@@ -74,13 +75,15 @@ const QuestionQuiz = ({ match, history, initialState, setInitialState, initState
                                             key={answerIndex}
                                             disabled={questionElement?.answer_id !== null} 
                                             value={ans?.id}
-                                            checked={Boolean(ans?.id === +questionElement?.answer_id)}
+                                            checked={ans?.id === +questionElement?.answer_id}
                                             name={""+questionElementIndex}
                                             control={<Radio />} 
                                             label={ans.text} />
                                     )})
                                 }
-                            </RadioGroup>
+                            </RadioGroup>{
+                                console.log(questionElement.answer_id != null)
+                            }
                             {questionElement.answer_id !== null
                                 ? (questionElement.answers.filter(q => +q.id === +questionElement.answer_id)[0]?.is_true 
                                         ?   <Typography style={{ color: "Green" }} variant="h5">{questionElement.feedback_true}</Typography> 
