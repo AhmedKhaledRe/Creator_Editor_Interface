@@ -11,8 +11,9 @@ function App({ history, initialState, setInitialState }) {
 
   const resetApp = () => {
     localStorage.removeItem("QuizList");
-    setInitialState({ ...initialState , listQuizData: initialData});
+    setInitialState({ ...initialState , listQuizData: initialData });
   }
+
   const renderQuizList = () => {
     return(
       <div className="app_main_div">
