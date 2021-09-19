@@ -15,8 +15,6 @@ const IndexRoutes = () => {
         return () => {}
         // eslint-disable-next-line
     }, []);
-
-    console.log(initialState.listQuizData)
     
     return (
         <Switch>
@@ -24,7 +22,7 @@ const IndexRoutes = () => {
                 <CreateQuiz initialState={initialState} setInitialState={setInitialState} />
             </Route>
             <Route exact path="/quiz/edit/:id">
-                <EditQuiz initialState={initialState} setInitialState={setInitialState} />
+                <EditQuiz initialState={initialState} setInitialState={setInitialState} initStateQuestion={initStateQuestion} setInitStateQuestion={setInitStateQuestion} />
             </Route>
             <Route exact path="/quiz/:id">
                 <QuestionQuiz initialState={initialState} setInitialState={setInitialState} initStateQuestion={initStateQuestion} setInitStateQuestion={setInitStateQuestion} />

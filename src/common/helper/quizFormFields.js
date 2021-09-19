@@ -15,7 +15,7 @@ export const quizFields = {
             component: MuiTextField,
         },
         {
-            name: "youtube_url",
+            name: "url",
             label: "YouTube URL",
             type: "text",
             component: MuiTextField,

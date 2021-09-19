@@ -10,10 +10,11 @@ import { quizFields } from '../helper/quizFormFields';
 import MuiTextField from "../helper/MuiTextField";
 import DeleteIcon from '@material-ui/icons/Delete';
 
-const CreateEditForm = ({ initialState, setInitialState, history, form, initialValues, handleSubmit }) => {
+const CreateEditForm = ({ initialState, setInitialState, history, formData, initialValues, handleSubmit }) => {
     const classes = useStyles();
     const moment = require('moment');
-    const [ questions, setQuestions ] = useState([{id: 0, answer_id: null, feedback_false: "", feedback_true: "", text: "", answers: [ {id: 0, is_true: false, text: ""}]}]);
+    const [ questions, setQuestions ] = 
+        useState([{id: 0, answer_id: null, feedback_false: "", feedback_true: "", text: "", answers: [ {id: 0, is_true: false, text: ""}]}]);
 
     const DeleteQuestion = (id) => {
         let newQuestions = questions;
@@ -62,13 +63,13 @@ const CreateEditForm = ({ initialState, setInitialState, history, form, initialV
             ...initialState.listQuizData,
             {
                 "created": moment().format("YYYY-MM-DD hh:mm:ss"),
-                "description": form.quizForm.values.description,
+                "description": formData.quizForm.values.description,
                 "id": Math.floor(Math.random() * 100),
                 "modified": moment().format("YYYY-MM-DD hh:mm:ss"),
                 "questions_answers": [...questions],
                 "score": null,
-                "title": form.quizForm.values.title,
-                "url": form.quizForm.values.youtube_url
+                "title": formData.quizForm.values.title,
+                "url": formData.quizForm.values.youtube_url
             }
         ];
         setInitialState({ 
@@ -98,8 +99,9 @@ const CreateEditForm = ({ initialState, setInitialState, history, form, initialV
                         );
                     })}
 
-                    {questions.length > 0 
-                        ? questions.map((questionNew, questionNewIndex) => {
+                    {initialValues?.questions_answers?.length > 0 || questions?.length > 0 
+                        ? (initialValues?.questions_answers || questions).map((questionNew, questionNewIndex) => {
+                            console.log(questionNew.text)
                             return (
                                 <Grid key={questionNewIndex} item xs={12}>
                                     <Paper variant="outlined" className={classes.paper}  >
@@ -107,17 +109,17 @@ const CreateEditForm = ({ initialState, setInitialState, history, form, initialV
                                             <Grid item xs={12}>
                                                 <Grid container justifyContent="center" spacing={2}>
                                                     <Grid item xs={10}>
-                                                        <Field name="text" type="text" label={`Question ${questionNew.id}`} onChange={(e) => handleEnterText(e, questionNewIndex)} required component={MuiTextField}/>
+                                                        <Field name="text" value={questionNew.text} type="text" label={`Question ${questionNew.id}`} onChange={(e) => handleEnterText(e, questionNewIndex)} required component={MuiTextField}/>
                                                     </Grid>
                                                     <Grid item xs={10}>
-                                                        <Field name="feedback_true" type="text" label={`Question Positive Feedback ${questionNew.id}`} onChange={(e) => handleEnterText(e, questionNewIndex)} required component={MuiTextField}/>
+                                                        <Field name="feedback_true" value={questionNew.feedback_true} type="text" label={`Question Positive Feedback ${questionNew.id}`} onChange={(e) => handleEnterText(e, questionNewIndex)} required component={MuiTextField}/>
                                                     </Grid>
                                                     <Grid item xs={10}>
-                                                        <Field name="feedback_false" type="text" label={`Question Negative Feedback ${questionNew.id}`} onChange={(e) => handleEnterText(e, questionNewIndex)} required component={MuiTextField}/>
+                                                        <Field name="feedback_false" value={questionNew.feedback_false} type="text" label={`Question Negative Feedback ${questionNew.id}`} onChange={(e) => handleEnterText(e, questionNewIndex)} required component={MuiTextField}/>
                                                     </Grid>
                                                 </Grid >
                                             </Grid >
-                                            {questions.length > 1 &&
+                                            {(initialValues?.questions_answers || questions).length > 1 &&
                                                 <div style={{position: 'absolute' , top: 5, right: 5 }} >
                                                     <Button variant="outlined" color="secondary" onClick={() => DeleteQuestion(+questionNew.id)}>
                                                         <DeleteIcon />
@@ -190,7 +192,7 @@ const CreateEditForm = ({ initialState, setInitialState, history, form, initialV
     );
 }
 
-const mapStateToProps = ({ form }) => ({ form })
+const mapStateToProps = ({ form }) => ({ formData: form })
 
 export default compose(
     reduxForm({ form: "quizForm", validate }),
