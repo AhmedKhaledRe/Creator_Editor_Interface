@@ -61,6 +61,7 @@ const QuestionQuiz = ({ match, history, initialState, setInitialState, initState
                     </Typography>
                 </div>
                 {initStateQuestion?.selectedQuiz?.questions_answers?.map((questionElement, questionElementIndex) => {
+                    console.log(questionElement)
                     return (
                         <Paper key={questionElementIndex} variant="outlined" className={classes.paper}  >
                             <Typography style={{margin: "20px auto"}} variant="h5">{`(${questionElementIndex + 1})`} {questionElement.text}</Typography>

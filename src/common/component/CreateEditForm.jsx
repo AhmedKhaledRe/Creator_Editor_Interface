@@ -30,7 +30,12 @@ const CreateEditForm = ({ initialState, setInitialState, history, formData, init
         setQuestions([...questions])
     }
 
-    const AddQuestion = () => setQuestions([...questions, { id: questions.length, answer_id: null, feedback_false: "", feedback_true: "", text: "", answers: [ { id : 0 } ] }])
+    const AddQuestion = () => {
+        let newQuestions = questions.concat( {id: questions.length, answer_id: null, feedback_false: "", feedback_true: "", text: "", answers: [ { id : 0 }] });
+        setQuestions([...newQuestions])
+
+        // setQuestions([...questions, { id: questions.length, answer_id: null, feedback_false: "", feedback_true: "", text: "", answers: [ { id : 0 } ] }])
+    };
 
     const DeleteAnswer = (questionNewIndex, newAnswerIndex) => {
         let newQuestions = questions;
@@ -54,7 +59,7 @@ const CreateEditForm = ({ initialState, setInitialState, history, formData, init
 
     const handleEnterText = (e, questionNewIndex) => {
         const {name, value} = e.target;
-        questions[questionNewIndex][name] = value;
+        questions[questionNewIndex][name.split("_")[0]] = value;
         setQuestions([...questions]);
     }
 
@@ -101,7 +106,6 @@ const CreateEditForm = ({ initialState, setInitialState, history, formData, init
 
                     {initialValues?.questions_answers?.length > 0 || questions?.length > 0 
                         ? (initialValues?.questions_answers || questions).map((questionNew, questionNewIndex) => {
-                            console.log(questionNew.text)
                             return (
                                 <Grid key={questionNewIndex} item xs={12}>
                                     <Paper variant="outlined" className={classes.paper}  >
@@ -109,13 +113,13 @@ const CreateEditForm = ({ initialState, setInitialState, history, formData, init
                                             <Grid item xs={12}>
                                                 <Grid container justifyContent="center" spacing={2}>
                                                     <Grid item xs={10}>
-                                                        <Field name="text" value={questionNew.text} type="text" label={`Question ${questionNew.id}`} onChange={(e) => handleEnterText(e, questionNewIndex)} required component={MuiTextField}/>
+                                                        <Field name={`text_${questionNew.id}`} value={questionNew.text} type="text" label={`Question ${questionNew.id}`} onChange={(e) => handleEnterText(e, questionNewIndex)} required component={MuiTextField}/>
                                                     </Grid>
                                                     <Grid item xs={10}>
-                                                        <Field name="feedback_true" value={questionNew.feedback_true} type="text" label={`Question Positive Feedback ${questionNew.id}`} onChange={(e) => handleEnterText(e, questionNewIndex)} required component={MuiTextField}/>
+                                                        <Field name={`feedback_true_${questionNew.id}`} value={questionNew.feedback_true} type="text" label={`Question Positive Feedback ${questionNew.id}`} onChange={(e) => handleEnterText(e, questionNewIndex)} required component={MuiTextField}/>
                                                     </Grid>
                                                     <Grid item xs={10}>
-                                                        <Field name="feedback_false" value={questionNew.feedback_false} type="text" label={`Question Negative Feedback ${questionNew.id}`} onChange={(e) => handleEnterText(e, questionNewIndex)} required component={MuiTextField}/>
+                                                        <Field name={`feedback_false_${questionNew.id}`}  value={questionNew.feedback_false} type="text" label={`Question Negative Feedback ${questionNew.id}`} onChange={(e) => handleEnterText(e, questionNewIndex)} required component={MuiTextField}/>
                                                     </Grid>
                                                 </Grid >
                                             </Grid >
@@ -132,7 +136,7 @@ const CreateEditForm = ({ initialState, setInitialState, history, formData, init
                                             return(
                                                 <Grid key={newAnswerIndex} container justifyContent="center" alignItems="center" spacing={2} style={{position: "relative"}}>
                                                     <Grid item xs={7}>
-                                                        <Field name={`Answer ${newAnswer.id}`} type="text" label={`Answer ${newAnswer.id}`} onChange={(e) => AnswerValue(e, questionNewIndex, newAnswerIndex)} required component={MuiTextField}/>
+                                                        <Field name={`Answer_${questionNewIndex}_${newAnswerIndex}`} type="text" label={`Answer ${newAnswer.id}`} onChange={(e) => AnswerValue(e, questionNewIndex, newAnswerIndex)} required component={MuiTextField}/>
                                                     </Grid>
                                                     <Grid item xs={3}>
                                                         <FormControlLabel
@@ -140,7 +144,7 @@ const CreateEditForm = ({ initialState, setInitialState, history, formData, init
                                                                 <Checkbox
                                                                     checked={newAnswer?.is_true}
                                                                     onChange={(e) => AnswerValue(e, questionNewIndex, newAnswerIndex)}
-                                                                    name="is_true"
+                                                                    name={`is_true_${questionNewIndex}_${newAnswerIndex}`}
                                                                     color="primary"
                                                                     value={newAnswer?.is_true}
                                                                     disabled={Boolean(questionNew?.answers?.find(an => an?.is_true === true)) 
@@ -195,6 +199,6 @@ const CreateEditForm = ({ initialState, setInitialState, history, formData, init
 const mapStateToProps = ({ form }) => ({ formData: form })
 
 export default compose(
-    reduxForm({ form: "quizForm", validate }),
+    reduxForm({ form: "quizForm", validate, destroyOnUnmount: true}),
     connect(mapStateToProps, {})
 )(withRouter(CreateEditForm));  
